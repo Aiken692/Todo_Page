@@ -12,8 +12,14 @@
     }
 </ul>
 
-<input placeholder="Something todo" @bind="newTodo"/>
+<input placeholder="Something todo" @bind="newTodo" @bind:event="oninput"/>
+<input placeholder="Due Date" @bind="dueDate" @bind:format="yyyy-MM-dd"/>
 <button @onclick="AddTodo">Add todo</button>
+
+@if (!string.IsNullOrEmpty(newTodo))
+{
+   <p>@newTodo Due: @dueDate?.ToShortDateString()</p>
+}
 
 @code {
     private List<TodoItem> todos = new();
@@ -21,12 +27,15 @@
     //private string? newTodo;
     private string? newTodo { get; set; }
 
+    private DateTime? dueDate = null;
+
     private void AddTodo()
     {
         if (!string.IsNullOrWhiteSpace(newTodo))
         {
             todos.Add(new TodoItem { Title = newTodo });
-            newTodo = string.Empty;
         }
+
+        newTodo = string.Empty;
     }
 }
